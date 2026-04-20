@@ -25,3 +25,9 @@ product:
 
 exchange:
   url: ${EXCHANGE_URL:http://exchange:8080}
+
+clients:
+  product:
+    url: http://localhost:8081
+  exchange:
+    url: http://localhost:8082

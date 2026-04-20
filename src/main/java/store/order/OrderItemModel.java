@@ -23,8 +23,8 @@ public class OrderItemModel {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private OrderModel order;   
-    
+    private OrderModel order;
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -37,8 +37,4 @@ public class OrderItemModel {
 
     @Column(nullable = false)
     private Double price;
-    
 }
-
-
-

@@ -43,5 +43,4 @@ public class OrderModel {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<OrderItemModel> items;
-
 }
