@@ -20,14 +20,11 @@ spring:
       hibernate:
         default_schema: orders
 
+order:
+  url: ${ORDER_URL:http://order:8081}
+
 product:
   url: ${PRODUCT_URL:http://product:8080}
 
 exchange:
   url: ${EXCHANGE_URL:http://exchange:8080}
-
-clients:
-  product:
-    url: http://localhost:8081
-  exchange:
-    url: http://localhost:8082

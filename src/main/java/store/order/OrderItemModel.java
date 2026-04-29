@@ -11,23 +11,21 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Accessors(chain = true, fluent = true)
 @Table(name = "order_items")
 public class OrderItemModel {
-
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private OrderModel order;
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private OrderModel order;
 
     @Column(nullable = false)
     private String productId;

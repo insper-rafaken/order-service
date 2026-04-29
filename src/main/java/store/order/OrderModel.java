@@ -15,13 +15,11 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Accessors(chain = true, fluent = true)
 @Table(name = "orders")
 public class OrderModel {
 
@@ -41,6 +39,6 @@ public class OrderModel {
     @Column(nullable = false)
     private Double total;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<OrderItemModel> items;
 }
