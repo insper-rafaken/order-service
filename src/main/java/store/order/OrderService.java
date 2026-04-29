@@ -11,14 +11,7 @@ public class OrderService {
     @Autowired
     private OrderRepository repository;
 
-    @Autowired
-    private ProductClient productClient;
-
-    @Autowired
-    private ExchangeClient exchangeClient;
-
     public Order create(Order order) {
-        order.total(10.0);
         OrderModel saved = repository.save(OrderParser.toModel(order));
         return OrderParser.to(saved);
     }
@@ -29,18 +22,9 @@ public class OrderService {
             .toList();
     }
 
-    public Order findById(String id, String currency) {
-        Order order = OrderParser.to(
+    public Order findById(String id) {
+        return OrderParser.to(
             repository.findById(id).orElse(null)
         );
-
-        if (order == null) return null;
-
-        if (currency != null){
-            order.total(order.total() * 5.85).currency(currency.toUpperCase());
-        }
-        
-
-        return order;
     }
 }

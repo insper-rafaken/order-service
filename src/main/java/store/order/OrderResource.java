@@ -25,7 +25,7 @@ public class OrderResource implements OrderController {
 
     @Override
     public ResponseEntity<OrderOut> findById(String id, String currency) {
-        Order order = service.findById(id, currency);
+        Order order = service.findById(id);
         if (order == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(OrderParser.to(order));
     }
