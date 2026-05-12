@@ -1,5 +1,6 @@
 package store.order;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class OrderModel {
     private String currency;
 
     @Column(nullable = false)
-    private Double total;
+    private BigDecimal total;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<OrderItemModel> items;

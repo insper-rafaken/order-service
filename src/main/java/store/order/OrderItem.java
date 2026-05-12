@@ -1,5 +1,7 @@
 package store.order;
 
+import java.math.BigDecimal;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -12,5 +14,5 @@ public class OrderItem {
     private String id;
     private String productId;
     private Integer quantity;
-    private Double price;
+    private BigDecimal price;
 }

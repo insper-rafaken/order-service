@@ -14,7 +14,7 @@
 	<version>1.0.0</version>
 
 	<properties>
-		<java.version>24</java.version>
+		<java.version>25</java.version>
 		<spring-cloud.version>2025.1.1</spring-cloud.version>
 		<maven.compiler.proc>full</maven.compiler.proc>
 	</properties>
@@ -58,18 +58,20 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa-test</artifactId>
-			<scope>test</scope>
+			<groupId>store</groupId>
+			<artifactId>product</artifactId>
+			<version>1.0.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>store</groupId>
+			<artifactId>exchange</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-flyway-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

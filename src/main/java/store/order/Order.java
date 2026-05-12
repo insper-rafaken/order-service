@@ -1,5 +1,6 @@
 package store.order;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +18,6 @@ public class Order {
     private LocalDateTime createdAt;
     private String currency;
     private List<OrderItem> items;
-    private Double total;
+    private BigDecimal total;
 
 }
