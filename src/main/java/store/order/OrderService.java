@@ -9,25 +9,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 import store.exchange.ExchangeController;
 import store.exchange.ExchangeOut;
+import store.product.ProductController;
 import store.product.ProductOut;
 
 @Service
 public class OrderService {
 
     private final OrderRepository repository;
-    private final ProductClient productClient;
+    private final ProductController productController;
     private final ExchangeController exchangeController;
 
-    public OrderService(OrderRepository repository, ProductClient productClient, ExchangeController exchangeController) {
+    public OrderService(OrderRepository repository, ProductController productController, ExchangeController exchangeController) {
         this.repository = repository;
-        this.productClient = productClient;
+        this.productController = productController;
         this.exchangeController = exchangeController;
     }
 
     @Transactional
     public Order create(Order order) {
         List<OrderItem> enrichedItems = order.items().stream().map(item -> {
-            ProductOut product = productClient.findById(UUID.fromString(item.productId())).getBody();
+            ProductOut product = productController.findById(UUID.fromString(item.productId())).getBody();
             BigDecimal price = product.price();
             return item.price(price);
         }).toList();
