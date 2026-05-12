@@ -1,5 +1,6 @@
 package store.order;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class OrderParser {
             .accountId(in.accountId())
             .currency("BRL")
             .createdAt(LocalDateTime.now())
-            .total(0.0)
+            .total(BigDecimal.ZERO)
             .items(items)
             .build();
     }
@@ -25,7 +26,7 @@ public class OrderParser {
         return OrderItem.builder()
             .productId(in.productId())
             .quantity(in.quantity())
-            .price(0.0)
+            .price(BigDecimal.ZERO)
             .build();
     }
 
@@ -37,8 +38,7 @@ public class OrderParser {
 
         return OrderOut.builder()
             .id(o.id())
-            .createdAt(o.createdAt())
-            .currency(o.currency())
+            .date(o.createdAt())
             .total(o.total())
             .items(items)
             .build();
@@ -46,10 +46,12 @@ public class OrderParser {
 
     public static OrderItemOut to(OrderItem item) {
         if (item == null) return null;
+        BigDecimal total = item.price().multiply(BigDecimal.valueOf(item.quantity()));
         return OrderItemOut.builder()
-            .productId(item.productId())
+            .id(item.id())
+            .product(new ProductRef(item.productId()))
             .quantity(item.quantity())
-            .price(item.price())
+            .total(total)
             .build();
     }
 

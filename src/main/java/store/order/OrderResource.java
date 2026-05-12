@@ -17,7 +17,7 @@ public class OrderResource implements OrderController {
     @Override
     public ResponseEntity<OrderOut> create(OrderIn in) {
         Order order = service.create(OrderParser.to(in));
-        return ResponseEntity.ok(OrderParser.to(order));
+        return ResponseEntity.status(201).body(OrderParser.to(order));
     }
 
     @Override
@@ -26,8 +26,8 @@ public class OrderResource implements OrderController {
     }
 
     @Override
-    public ResponseEntity<OrderOut> findById(String id, String currency) {
-        Order order = service.findById(id);
+    public ResponseEntity<OrderOut> findById(String id, String currency, String authorization) {
+        Order order = service.findById(id, currency, authorization);
         if (order == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(OrderParser.to(order));
     }

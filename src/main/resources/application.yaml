@@ -25,6 +25,9 @@ order:
 
 product:
   url: ${PRODUCT_URL:http://product:8080}
+  security:
+    username: ${PRODUCT_USERNAME:admin}
+    password: ${PRODUCT_PASSWORD:admin123}
 
 exchange:
   url: ${EXCHANGE_URL:http://exchange:8080}
