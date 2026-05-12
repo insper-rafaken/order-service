@@ -49,7 +49,7 @@ public class OrderParser {
         BigDecimal total = item.price().multiply(BigDecimal.valueOf(item.quantity()));
         return OrderItemOut.builder()
             .id(item.id())
-            .product(new ProductRef(item.productId()))
+            .productId(item.productId())
             .quantity(item.quantity())
             .total(total)
             .build();
