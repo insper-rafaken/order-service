@@ -41,6 +41,7 @@ public class OrderParser {
             .date(o.createdAt())
             .total(o.total())
             .items(items)
+            .currency(o.currency())
             .build();
     }
 
