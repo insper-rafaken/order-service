@@ -50,12 +50,12 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public Order findById(String id, String currency, String authorization) {
+    public Order findById(String id, String currency, String idAccount) {
         Order order = OrderParser.to(repository.findById(id).orElse(null));
         if (order == null) return null;
 
-        if (currency != null && !currency.equalsIgnoreCase("BRL") && authorization != null) {
-            ExchangeOut exchange = exchangeController.getExchange("BRL", currency, authorization).getBody();
+        if (currency != null && !currency.equalsIgnoreCase("BRL") && idAccount != null) {
+            ExchangeOut exchange = exchangeController.getExchange("BRL", currency, idAccount).getBody();
             BigDecimal rate = BigDecimal.valueOf(exchange.sell());
 
             List<OrderItem> convertedItems = order.items().stream()
