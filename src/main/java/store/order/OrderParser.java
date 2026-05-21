@@ -2,18 +2,22 @@ package store.order;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class OrderParser {
 
-    public static Order to(OrderIn in) {
+    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
+    public static Order to(OrderIn in, String idAccount) {
         if (in == null) return null;
 
         var items = in.items() == null ? List.<OrderItem>of() :
             in.items().stream().map(OrderParser::to).toList();
 
         return Order.builder()
-            .accountId(in.accountId())
+            .accountId(idAccount)
             .currency("BRL")
             .createdAt(LocalDateTime.now())
             .total(BigDecimal.ZERO)
@@ -24,7 +28,7 @@ public class OrderParser {
     public static OrderItem to(OrderItemIn in) {
         if (in == null) return null;
         return OrderItem.builder()
-            .productId(in.productId())
+            .productId(in.idProduct())
             .quantity(in.quantity())
             .price(BigDecimal.ZERO)
             .build();
@@ -38,7 +42,7 @@ public class OrderParser {
 
         return OrderOut.builder()
             .id(o.id())
-            .date(o.createdAt())
+            .date(o.createdAt() != null ? o.createdAt().format(DATE_FMT) : null)
             .total(o.total())
             .items(items)
             .currency(o.currency())
@@ -50,7 +54,7 @@ public class OrderParser {
         BigDecimal total = item.price().multiply(BigDecimal.valueOf(item.quantity()));
         return OrderItemOut.builder()
             .id(item.id())
-            .productId(item.productId())
+            .product(OrderItemOut.Product.builder().id(item.productId()).build())
             .quantity(item.quantity())
             .total(total)
             .build();
