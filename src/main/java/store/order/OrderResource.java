@@ -17,7 +17,7 @@ public class OrderResource implements OrderController {
     @Override
     public ResponseEntity<OrderOut> create(OrderIn in, String idAccount) {
         Order order = service.create(OrderParser.to(in, idAccount));
-        return ResponseEntity.status(201).body(OrderParser.to(order));
+        return ResponseEntity.status(202).body(OrderParser.to(order));
     }
 
     @Override

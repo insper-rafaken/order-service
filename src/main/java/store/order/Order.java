@@ -19,5 +19,6 @@ public class Order {
     private String currency;
     private List<OrderItem> items;
     private BigDecimal total;
+    private String status;
 
 }

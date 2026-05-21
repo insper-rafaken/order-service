@@ -40,6 +40,9 @@ public class OrderModel {
     @Column(nullable = false)
     private BigDecimal total;
 
+    @Column(nullable = false)
+    private String status;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<OrderItemModel> items;
 }

@@ -20,8 +20,18 @@ spring:
       hibernate:
         default_schema: orders
 
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+
 order:
   url: ${ORDER_URL:http://order:8081}
+  rabbitmq:
+    exchange: order.exchange
+    queue: order.queue
+    routing-key: order.created
 
 product:
   url: ${PRODUCT_URL:http://product:8080}

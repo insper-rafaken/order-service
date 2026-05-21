@@ -21,6 +21,7 @@ public class OrderParser {
             .currency("BRL")
             .createdAt(LocalDateTime.now())
             .total(BigDecimal.ZERO)
+            .status("PENDING")
             .items(items)
             .build();
     }
@@ -46,6 +47,7 @@ public class OrderParser {
             .total(o.total())
             .items(items)
             .currency(o.currency())
+            .status(o.status())
             .build();
     }
 
@@ -72,6 +74,7 @@ public class OrderParser {
         model.setCreatedAt(o.createdAt());
         model.setCurrency(o.currency());
         model.setTotal(o.total());
+        model.setStatus(o.status() != null ? o.status() : "PENDING");
 
         List<OrderItemModel> items = o.items() == null ? List.of() :
             o.items().stream().map(item -> toItemModel(item, model)).toList();
@@ -102,6 +105,7 @@ public class OrderParser {
             .createdAt(m.getCreatedAt())
             .currency(m.getCurrency())
             .total(m.getTotal())
+            .status(m.getStatus())
             .items(items)
             .build();
     }

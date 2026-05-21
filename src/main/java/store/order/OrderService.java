@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import store.exchange.ExchangeController;
 import store.exchange.ExchangeOut;
@@ -18,28 +20,48 @@ public class OrderService {
     private final OrderRepository repository;
     private final ProductController productController;
     private final ExchangeController exchangeController;
+    private final OrderPublisher publisher;
 
-    public OrderService(OrderRepository repository, ProductController productController, ExchangeController exchangeController) {
+    public OrderService(OrderRepository repository, ProductController productController,
+            ExchangeController exchangeController, OrderPublisher publisher) {
         this.repository = repository;
         this.productController = productController;
         this.exchangeController = exchangeController;
+        this.publisher = publisher;
     }
 
     @Transactional
     public Order create(Order order) {
-        List<OrderItem> enrichedItems = order.items().stream().map(item -> {
-            ProductOut product = productController.findById(UUID.fromString(item.productId())).getBody();
-            BigDecimal price = product.price();
-            return item.price(price);
-        }).toList();
+        OrderModel saved = repository.save(OrderParser.toModel(order));
+        String orderId = saved.getId();
 
-        BigDecimal total = enrichedItems.stream()
-            .map(item -> item.price().multiply(BigDecimal.valueOf(item.quantity())))
+        // publica na fila apenas após o commit para evitar race condition
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                publisher.publish(new OrderMessage(orderId));
+            }
+        });
+
+        return OrderParser.to(saved);
+    }
+
+    @Transactional
+    public void processOrder(String orderId) {
+        OrderModel model = repository.findById(orderId).orElseThrow();
+
+        model.getItems().forEach(item -> {
+            ProductOut product = productController.findById(UUID.fromString(item.getProductId())).getBody();
+            item.setPrice(product.price());
+        });
+
+        BigDecimal total = model.getItems().stream()
+            .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Order enriched = order.items(enrichedItems).total(total);
-        OrderModel saved = repository.save(OrderParser.toModel(enriched));
-        return OrderParser.to(saved);
+        model.setTotal(total);
+        model.setStatus("CONFIRMED");
+        repository.save(model);
     }
 
     @Transactional(readOnly = true)
