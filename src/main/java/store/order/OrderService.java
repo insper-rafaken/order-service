@@ -2,7 +2,6 @@ package store.order;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,21 +10,20 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import store.exchange.ExchangeController;
 import store.exchange.ExchangeOut;
-import store.product.ProductController;
 import store.product.ProductOut;
 
 @Service
 public class OrderService {
 
     private final OrderRepository repository;
-    private final ProductController productController;
+    private final ProductCacheService productCacheService;
     private final ExchangeController exchangeController;
     private final OrderPublisher publisher;
 
-    public OrderService(OrderRepository repository, ProductController productController,
+    public OrderService(OrderRepository repository, ProductCacheService productCacheService,
             ExchangeController exchangeController, OrderPublisher publisher) {
         this.repository = repository;
-        this.productController = productController;
+        this.productCacheService = productCacheService;
         this.exchangeController = exchangeController;
         this.publisher = publisher;
     }
@@ -51,7 +49,7 @@ public class OrderService {
         OrderModel model = repository.findById(orderId).orElseThrow();
 
         model.getItems().forEach(item -> {
-            ProductOut product = productController.findById(UUID.fromString(item.getProductId())).getBody();
+            ProductOut product = productCacheService.getProduct(item.getProductId());
             item.setPrice(product.price());
         });
 
